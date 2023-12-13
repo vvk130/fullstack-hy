@@ -1,7 +1,7 @@
 export default function Header({course}) {
     return (
         <p>
-            {course}
+            {course.name}
         </p>
     )
   }

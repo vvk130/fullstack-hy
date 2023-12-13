@@ -1,9 +1,9 @@
 import Part from './Part'
 
-export default function Content({parts}) {
+export default function Content({course}) {
     return (
       <div>
-      {parts.map((part, index) => (
+      {course.parts.map((part, index) => (
         <Part key={index} part={part} />
       ))}
       </div>

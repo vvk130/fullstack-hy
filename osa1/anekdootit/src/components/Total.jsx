@@ -1,5 +1,6 @@
-export default function Header({parts}) {
+export default function Total({course}) {
+
     return (
-            <p>Number of exercises {parts[0].amount + parts[1].amount + parts[2].amount}</p>
+        <p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}</p>
     )
   }
