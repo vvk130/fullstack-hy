@@ -20,7 +20,6 @@ const App = () => {
       [text]: feedbacks[text] + 1,
       }
       setCount(newFeedbacks)
-      console.log(feedbacks[text])
   }
 
   return (
