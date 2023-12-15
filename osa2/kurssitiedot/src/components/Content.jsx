@@ -4,13 +4,11 @@ import Part from './Part'
 export default function Content({course}) {
     return (
         <>
-        <div>
         {course.parts.map((part) =>
         <div key={part.id}>
         <Part name={part.name} exercises={part.exercises}/>
         </div>
         )}
-        </div>
         </>
     )
   }
