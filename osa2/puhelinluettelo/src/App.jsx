@@ -3,29 +3,28 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import PersonsService from './components/PersonsService'
 
-const App = () => {
+export const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
 
-  const filteredNames = persons.filter(person => person.name.toLowerCase().includes(newSearch.toLowerCase()))
+  const filteredNames = persons && persons.length > 0 ? persons.filter(person => person && person.name && person.name.toLowerCase().includes(newSearch.toLowerCase())) : []
 
-  const addName = (event) => {
+  const addName = async(event) => {
     event.preventDefault()
 
-    if (persons.map(item => item.name).includes(newName)){
+    if (persons.map(item => item.name.toLowerCase()).includes(newName.toLowerCase())){
       alert(`${newName} is already added to phonebook`)
       return;
     }   
@@ -34,7 +33,8 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    setPersons(persons.concat(personObject))
+
+    setPersons(persons.concat(await PersonsService.create(personObject)))
     setNewNumber('')
     setNewName('')
   }
@@ -49,6 +49,14 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const deleteHandler = async (personToDelete) => {
+    if (window.confirm("Delete "+ personToDelete.name + " ?")) {
+      console.log("Deleted: " + personToDelete.id)
+      await PersonsService.deletePerson(personToDelete)
+      setPersons(filteredPersons => filteredPersons.filter(person => person.id !== personToDelete.id))    
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -60,7 +68,7 @@ const App = () => {
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
         addName={addName}/>
-      <Persons newSearch={newSearch} filteredNames={filteredNames} persons={persons}/>
+      <Persons newSearch={newSearch} filteredNames={filteredNames} persons={persons} deleteHandler={deleteHandler}/>
     </div>
   )
 }

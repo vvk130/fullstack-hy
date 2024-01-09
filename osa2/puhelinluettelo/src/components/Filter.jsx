@@ -16,4 +16,4 @@ export default function Filter({ newSearch, setNewSearch }) {
       </form>
         </>
     )
-  }
+}
